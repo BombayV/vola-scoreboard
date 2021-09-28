@@ -1,19 +1,20 @@
-function playerStatus(playerId, identifier, time, actualTime)
+function playerStatus(playerId, identifier, time, actualTime, playerName)
     local self = {}
     self.source = playerId
     self.identifier = identifier
     self.time = tonumber(time)
     self.actualTime = tonumber(actualTime)
+    self.name = playerName
 
     self.getIdentifier = function()
         return self.identifier
     end
 
     self.getName = function()
-        return GetPlayerName(self.source)
+        return self.name
     end
 
-    self.getTime = function()
+    self.Time = function()
         local this = {}
 
         this.totalFormatted = function(format)
