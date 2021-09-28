@@ -50,7 +50,7 @@ end
 RegisterNetEvent('vola:getPlayers', function()
     local source <const> = source
     if not playerData[source] then
-        return print('Scoreboard needs to be refreshed. Use /restartScoreboard')
+        return print('Scoreboard needs to be refreshed. Tell an admin to use /restartScoreboard')
     end
     local currentPlayers = {}
     local time = os.time()

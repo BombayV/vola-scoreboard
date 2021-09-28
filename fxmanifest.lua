@@ -18,3 +18,13 @@ server_scripts{
     'server/classes/player.lua',
     'server/server.lua'
 }
+
+ui_page 'html/ui.html'
+
+files {
+    'html/ui.html',
+    'html/fonts/*.ttf',
+    'html/css/*.css',
+    'html/img/*.png',
+    'html/js/*.js'
+}
