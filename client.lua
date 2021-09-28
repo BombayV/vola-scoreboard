@@ -1,5 +1,6 @@
 local CreateThread = CreateThread
 local Wait = Wait
+local CreateThread = CreateThread
 
 local firstSpawn = true
 

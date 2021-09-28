@@ -91,4 +91,4 @@ RegisterCommand('restartScoreboard', function(source)
         local time = getTime(players[i])
         playerData[tonumber(players[i])] = playerStatus(players[i], getLicense(players[i]), time, actualTime)
     end
-end)
+end, false) -- False, everyone can use it
