@@ -1,5 +1,7 @@
+-- All players
 local playerData = {}
 
+-- Functions
 local function getLicense(playerId)
     local identifiers = GetPlayerIdentifiers(playerId)
 
@@ -11,6 +13,40 @@ local function getLicense(playerId)
     return false
 end
 
+local function savePlayerData(playerId, time, player)
+    if playerId then
+        if player then
+            if not time then time = os.time() end
+            MySQL.Async.execute('INSERT INTO time_played (license, time) VALUES (@identifier, @time)', {
+                ['identifier'] = identifier,
+                ['time'] = player.Time().currentTime(time)
+            }, function(result)
+                print(result)
+            end)
+        end
+    end
+end
+
+local function getTime(playerId)
+    local p = promise.new()
+    local license = getLicense(playerId)
+    MySQL.Async.fetchScalar('SELECT time FROM time_played WHERE license = @license', {
+        ['license'] = license
+    }, function(result)
+        if result then
+            return p:resolve({currentTime = result})
+        else
+            MySQL.Async.execute('INSERT INTO time_played (license) VALUES (@identifier)', {
+                ['identifier'] = license
+            })
+            return p:resolve({currentTime = 0})
+        end
+    end)
+    local resp = Citizen.Await(p)
+    return resp.currentTime
+end
+
+-- Events
 RegisterNetEvent('vola:getPlayers', function()
     local source <const> = source
     if not playerData[source] then
@@ -34,6 +70,7 @@ RegisterNetEvent('vola:playerJoined', function()
     end
 end)
 
+-- Save player on drop
 AddEventHandler('playerDropped', function()
 	local playerId <const> = source
 	local player = playerData[playerId]
@@ -45,39 +82,7 @@ AddEventHandler('playerDropped', function()
 	end
 end)
 
-function savePlayerData(playerId, time, player)
-    if playerId then
-        if player then
-            if not time then time = os.time() end
-            MySQL.Async.execute('INSERT INTO time_played (license, time) VALUES (@identifier, @time)', {
-                ['identifier'] = identifier,
-                ['time'] = player.Time().currentTime(time)
-            }, function(result)
-                print(result)
-            end)
-        end
-    end
-end
-
-function getTime(playerId)
-    local p = promise.new()
-    local license = getLicense(playerId)
-    MySQL.Async.fetchScalar('SELECT time FROM time_played WHERE license = @license', {
-        ['license'] = license
-    }, function(result)
-        if result then
-            return p:resolve({currentTime = result})
-        else
-            MySQL.Async.execute('INSERT INTO time_played (license) VALUES (@identifier)', {
-                ['identifier'] = license
-            })
-            return p:resolve({currentTime = 0})
-        end
-    end)
-    local resp = Citizen.Await(p)
-    return resp.currentTime
-end
-
+-- Command
 RegisterCommand('restartScoreboard', function(source)
     local playerId <const> = source
     local actualTime =  os.time()

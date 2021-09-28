@@ -54,7 +54,7 @@ function playerStatus(playerId, identifier, time, actualTime, playerName)
         end
 
         this.displayed = function(currentTime)
-            local minutes = math.floor(this.currentTimePassed(currentTime) / 60)
+            local minutes = math.floor(this.currentTime(currentTime) / 60)
             local hours =  math.floor(this.currentTime(currentTime) / 3600)
 
             return hours..'HRS '..minutes..'M'
