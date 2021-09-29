@@ -19,4 +19,5 @@ const updateScoreboard = data => {
     console.log(data)
     console.log(data.playersName)
     console.log(data.playersTime)
+    console.log(JSON.parse(data))
 }
