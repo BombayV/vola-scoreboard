@@ -16,7 +16,7 @@ window.addEventListener('load', () => {
 })
 
 const updateScoreboard = data => {
-    data.forEach(dataItem => {
-        console.log(dataItem)
-    });
+    console.log(data)
+    console.log(data.playersName)
+    console.log(data.playersTime)
 }

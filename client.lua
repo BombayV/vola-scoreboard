@@ -27,12 +27,10 @@ end)
 
 RegisterNetEvent('vola:updatePlayers', function(players)
     print(json.encode(players))
-    --[[
     SendNUIMessage({
         action = 'updatePlayers',
         players = players
     })
-    ]]
 end)
 
 RegisterCommand(Config.CommandName, function()
