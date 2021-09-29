@@ -8,7 +8,8 @@ window.addEventListener('load', () => {
     })
 
     doc.onkeyup = e => {
-        if (e.key == ('Escape' || 'Home')) {
+        const key = e.key
+        if (key == 'Escape' || key == 'Home') {
             console.log('NUI: Scoreboard closed');
         }
     }
