@@ -45,17 +45,40 @@ body {
     overflow-y: auto;
 }
 
+/* Scroll Bar */
+.players::-webkit-scrollbar {
+  width: 0.5vh;
+}
+
+.players::-webkit-scrollbar-track {
+  border-radius: 0px;
+  background-color: #555;
+}
+
+.players::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 12px;
+}
+
+.players::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
 .players div {
+    position: relative;
     display: flex;
     justify-content: flex-start;
     align-items: center;
     flex-flow: column nowrap;
-    width: 33.333333%;
-
-    background-color: darkblue;
+    width: 33.3%;
+    height: 100%;
 }
 
 .players div span {
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     color: #d3d3d3;
     font-size: 2.0vh;
     font-family: "Beba";
