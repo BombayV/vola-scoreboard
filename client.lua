@@ -18,25 +18,26 @@ CreateThread(function()
 	end
 end)
 
-CreateThread(function()
-    while true do
-        Wait(Config.UpdateTime * 1000)
-        TriggerServerEvent('vola:getPlayers')
-    end
-end)
-
-RegisterNetEvent('vola:updatePlayers', function(players)
-    print(json.encode(players))
+RegisterNetEvent('vola:updatePlayers', function(players, maxPlayers, runTime)
     SendNUIMessage({
         action = 'updatePlayers',
-        players = players
+        players = players,
+        maxPlayers = maxPlayers,
+        runTime = runTime
     })
 end)
 
 RegisterCommand(Config.CommandName, function()
     if not IsEntityDead(PlayerPedId()) then
+        TriggerServerEvent('vola:getPlayers')
         SendNUIMessage({action = 'openScoreboard'})
+        SetNuiFocus(1, 1)
     end
 end)
 
 RegisterKeyMapping(Config.CommandName, Config.CommandDescription, 'keyboard', Config.CommandKey)
+
+RegisterNUICallback('close', function(_, cb)
+    SetNuiFocus(0, 0)
+    cb({})
+end)

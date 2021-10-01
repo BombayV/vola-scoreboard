@@ -10,41 +10,47 @@
     <link rel="stylesheet" href="./css/style.css">
 </head>
 <body>
-    <div class="wrapper">
+    <div id="wrapper" class="wrapper">
         <div class="container">
             <div class="header">
-
+                <div>
+                    <img src="./img/fivem.png" alt="Top">
+                </div>
+                <div class="data">
+                    <div class="server-info" style="background-color: rgba(0, 0, 0, 0.45); border-top: 0.2vh solid #d6d6d6;">
+                        <span id="players">Players: 1 / 124</span>
+                        <span>&nbsp;|&nbsp;</span>
+                        <span id="runtime">Playtime: 01HRS 23M</span>
+                    </div>
+                    <div class="server-status" style="background-color: rgba(0, 0, 0, 0.45); border-top: 0.2vh solid #d6d6d6;">
+                        <div>
+                            <img src="./img/admin.png" alt="img">
+                            <span>1</span>
+                        </div>
+                        <div>
+                            <img src="./img/police.png" alt="img">
+                            <span>1</span>
+                        </div>
+                        <div>
+                            <img src="./img/nhs.png" alt="img">
+                            <span>1</span>
+                        </div>
+                        <div>
+                            <img src="./img/civlian.png" alt="img">
+                            <span>1</span>
+                        </div>
+                    </div>
+                    <div class="players-type" style="border-bottom: 0.2vh solid #d6d6d6; border-top: 0.2vh solid #d6d6d6;">
+                        <div>Name</div>
+                        <div>Played</div>
+                        <div>Status</div>
+                    </div>
+                </div>
             </div>
             <div class="players">
-                <div>
-                    <span>test</span>
-                    <span>test</span>
-                    <span>test</span>
-                    <span>test</span>
-                    <span>test</span>
-                    <span>test</span>
-                    <span>test</span>
-                    <span>test</span>
-                    <span>test</span>
-                    <span>test</span>
-                    <span>test</span>
-                    <span>test</span>
-                    <span>test</span>
-                    <span>test</span>
-                    <span>test</span>
-                    <span>test</span>
-                    <span>test</span>
-                    <span>a</span>
-                    <span>test</span>
-                    <span>test</span>
-                    <span>test</span>
-                </div>
-                <div>
-                    <span>test</span>
-                </div>
-                <div>
-                    <span>test</span>
-                </div>
+                <div id="cont-names"></div>
+                <div id="cont-time"></div>
+                <div id="cont-status"></div>
             </div>
         </div>
     </div>

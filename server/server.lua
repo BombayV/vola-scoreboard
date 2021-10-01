@@ -66,12 +66,14 @@ RegisterNetEvent('vola:getPlayers', function()
         return print('Scoreboard needs to be refreshed. Tell an admin to use /restartScoreboard')
     end
     local currentPlayers = {}
+    local players = 'Players: ' .. #GetPlayers() .. ' / ' .. GetConvarInt('sv_maxclients', 32)
     local time = os.time()
-    for _, v in pairs(GetPlayers()) do
+    local runTime =  playerData[tonumber(source)].Time().displayed(time)
+    for k, v in pairs(GetPlayers()) do
         local player = playerData[tonumber(v)]
-        currentPlayers[v] = {playersName = player.getName(), playersTime = player.Time().displayed(time)}
+        currentPlayers[k] = {playersId = player.source, playersName = player.getName(), playersTime = player.Time().displayed(time), playersJob = 'Police'}
     end
-    TriggerClientEvent('vola:updatePlayers', source, currentPlayers)
+    TriggerClientEvent('vola:updatePlayers', source, currentPlayers, players, runTime)
 end)
 
 RegisterNetEvent('vola:playerJoined', function()
@@ -104,7 +106,7 @@ RegisterCommand('restartScoreboard', function(source)
         local time = getTime(players[i])
         playerData[tonumber(players[i])] = playerStatus(players[i], getLicense(players[i]), time, actualTime)
     end
-end, false) -- False, everyone can use it
+end, true) -- False, everyone can use it
 
 RegisterCommand('saveScore', function(source)
     local playerId <const> = source
