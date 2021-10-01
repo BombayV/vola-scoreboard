@@ -6,7 +6,7 @@ window.addEventListener('load', () => {
             doc.getElementById('wrapper').style.display = 'flex';
         }
         if (e.data.action == 'updatePlayers') {
-            updateScoreboard(e.data.players, e.data.maxPlayers, e.data.runTime);
+            updateScoreboard(e.data.players, e.data.maxPlayers, e.data.runTime, e.data.jobs);
         }
     })
 
@@ -19,7 +19,7 @@ window.addEventListener('load', () => {
     }
 })
 
-const updateScoreboard = (players, maxPlayers, runTime) => {
+const updateScoreboard = (players, maxPlayers, runTime, currJobs) => {
     const names = doc.getElementById('cont-names');
     const times = doc.getElementById('cont-time');
     const status = doc.getElementById('cont-status');
@@ -51,6 +51,10 @@ const updateScoreboard = (players, maxPlayers, runTime) => {
 
     doc.getElementById('players').textContent = maxPlayers;
     doc.getElementById('runtime').textContent = runTime;
+    doc.getElementById('curr-admin').textContent = currJobs.admin;
+    doc.getElementById('curr-police').textContent = currJobs.police;
+    doc.getElementById('curr-nhs').textContent = currJobs.nhs;
+    doc.getElementById('curr-civilian').textContent = currJobs.civilian;
 }
 
 const fetchNUI = async (cbname, data) => {

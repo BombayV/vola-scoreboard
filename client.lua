@@ -18,12 +18,13 @@ CreateThread(function()
 	end
 end)
 
-RegisterNetEvent('vola:updatePlayers', function(players, maxPlayers, runTime)
+RegisterNetEvent('vola:updatePlayers', function(players, maxPlayers, runTime, jobs)
     SendNUIMessage({
         action = 'updatePlayers',
         players = players,
         maxPlayers = maxPlayers,
-        runTime = runTime
+        runTime = runTime,
+        jobs = jobs
     })
 end)
 

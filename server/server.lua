@@ -1,3 +1,15 @@
+-- You can add as many groups as u like here
+local allGroups = {
+    {name = "Superadmin", group = "superadmin"},
+    {name = "Admin", group = "admin"},
+    {name = "Police", group = "police"},
+    {name = "NHS", group = "ambulance"}
+}
+
+local Tunnel = module("vrp", "lib/Tunnel")
+local Proxy = module("vrp", "lib/Proxy")
+vRP = Proxy.getInterface("vRP")
+
 -- All players
 local playerData = {}
 
@@ -17,7 +29,7 @@ local function savePlayerData(playerId, time, player)
     if playerId then
         if player then
             if not time then time = os.time() end
-            MySQL.Async.execute('UPDATE time_played SET time=@time WHERE license=@license', {
+            exports['ghmattimysql']:execute('UPDATE time_played SET time=@time WHERE license=@license', {
                 ['license'] = player.identifier,
                 ['time'] = player.Time().currentTime(time)
             }, function(result)
@@ -32,13 +44,13 @@ end
 local function getTime(playerId)
     local p = promise.new()
     local license = getLicense(playerId)
-    MySQL.Async.fetchScalar('SELECT time FROM time_played WHERE license = @license', {
+    exports['ghmattimysql']:execute('SELECT time FROM time_played WHERE license = @license', {
         ['license'] = license
     }, function(result)
-        if result then
-            return p:resolve({currentTime = result})
+        if type(next(result)) ~= "nil" then
+            return p:resolve({currentTime = result[1].time})
         else
-            MySQL.Async.execute('INSERT INTO time_played (license) VALUES (@license)', {
+            exports['ghmattimysql']:execute('INSERT INTO time_played (license) VALUES (@license)', {
                 ['license'] = license
             })
             return p:resolve({currentTime = 0})
@@ -46,6 +58,45 @@ local function getTime(playerId)
     end)
     local resp = Citizen.Await(p)
     return resp.currentTime
+end
+
+local function getStatus(playerId)
+    local user_id = vRP.getUserId({playerId})
+    local groups = vRP.getUserGroups({user_id})
+    if groups then
+        for _, v in pairs(allGroups) do
+            for k, e in pairs(groups) do
+                if v.group == k then
+                    return v.name
+                end
+            end
+        end
+    end
+    return "Civilian"
+end
+
+local function getJobs()
+    local status = {
+        civilian = 0,
+        police = 0,
+        nhs = 0,
+        admin = 0
+    }
+
+    for _, v in pairs(GetPlayers()) do
+        local user_id = vRP.getUserId({tonumber(v)})
+        local groups = vRP.getUserGroups({user_id})
+        if groups.admin then
+            status.admin = status.admin + 1
+        elseif groups.police then
+            status.police = status.police + 1
+        elseif groups.nhs then
+            status.nhs = status.nhs + 1
+        elseif groups.civilian then
+        status.civilian = status.civilian + 1
+        end
+    end
+    return status
 end
 
 function formatTime(seconds)
@@ -71,16 +122,17 @@ RegisterNetEvent('vola:getPlayers', function()
     local runTime =  playerData[tonumber(source)].Time().displayed(time)
     for k, v in pairs(GetPlayers()) do
         local player = playerData[tonumber(v)]
-        currentPlayers[k] = {playersId = player.source, playersName = player.getName(), playersTime = player.Time().displayed(time), playersJob = 'Police'}
+        local status = getStatus(player.source)
+        currentPlayers[k] = {playersId = player.source, playersName = player.getName(), playersTime = player.Time().displayed(time), playersJob = status}
     end
-    TriggerClientEvent('vola:updatePlayers', source, currentPlayers, players, runTime)
+    TriggerClientEvent('vola:updatePlayers', source, currentPlayers, players, runTime, getJobs())
 end)
 
 RegisterNetEvent('vola:playerJoined', function()
     local playerId <const> = source
     if getLicense(playerId) then
         local time = getTime(playerId)
-        local actualTime =  os.time()
+        local actualTime = os.time()
         playerData[tonumber(playerId)] = playerStatus(playerId, getLicense(playerId), time, actualTime, GetPlayerName(playerId))
     end
 end)
