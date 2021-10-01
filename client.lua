@@ -28,7 +28,7 @@ RegisterNetEvent('vola:updatePlayers', function(players, maxPlayers, runTime)
 end)
 
 RegisterCommand(Config.CommandName, function()
-    if not IsEntityDead(PlayerPedId()) then
+    if not IsEntityDead(PlayerPedId()) and not IsPauseMenuActive() then
         TriggerServerEvent('vola:getPlayers')
         SendNUIMessage({action = 'openScoreboard'})
         SetNuiFocus(1, 1)

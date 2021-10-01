@@ -13,16 +13,11 @@ window.addEventListener('load', () => {
     doc.onkeyup = e => {
         const key = e.key
         if (key == 'Escape') {
-            console.log('NUI: Scoreboard closed');
-            fetchNUI('close')
+            fetchNUI('close');
             doc.getElementById('wrapper').style.display = 'none';
         }
     }
 })
-
-/**
- * @param {Object[]} players - Array of players
-*/
 
 const updateScoreboard = (players, maxPlayers, runTime) => {
     const names = doc.getElementById('cont-names');
@@ -30,9 +25,7 @@ const updateScoreboard = (players, maxPlayers, runTime) => {
     const status = doc.getElementById('cont-status');
 
     for (let i=doc.getElementsByClassName('currentData').length - 1; i >= 0; i--) {
-        if (doc.getElementsByClassName('currentData')[i].className.split(' ')[1] != players.indexOf(players[doc.getElementsByClassName('currentData')[i].className.split(' ')[1]])) {
-            doc.getElementsByClassName('currentData')[i].remove()
-        }
+        doc.getElementsByClassName('currentData')[i].remove()
     }
 
     players.forEach(player => {
