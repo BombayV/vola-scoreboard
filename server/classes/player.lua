@@ -13,11 +13,6 @@ function playerStatus(playerId, identifier, time, actualTime, playerName)
     self.Time = function()
         local this = {}
 
-        this.totalFormatted = function(format)
-            if not format then format = ':' end
-            return this.hours()..format..this.minutes()..format..this.seconds()
-        end
-
         this.totalPlayer = function()
             return self.time
         end
